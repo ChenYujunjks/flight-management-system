@@ -1,101 +1,124 @@
-import Image from "next/image";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { Button } from "~/components/ui/button";
+import { getUser } from "~/server/auth/getUser";
+import { getUserType } from "~/server/auth/getUserType";
+import { signout } from "~/server/auth/actions/signout";
 
-export default function Home() {
+export default async function HomePage() {
+  const user = await getUser();
+  const userType = user ? await getUserType(user.email) : null;
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <main className="flex min-h-[90vh] flex-col items-center justify-center">
+      <div className="container flex flex-col items-center justify-center gap-8 px-4 py-16 ">
+        <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
+          Flight Management System
+        </h1>
+        {user && userType ? (
+          <>
+            <span className="text-xl text-muted-foreground">
+              Welcome back, {userType} {user.email}
+            </span>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            {
+              <div className="flex max-w-3xl flex-wrap place-content-center gap-2">
+                <Button variant={"ghost"} asChild className="text-lg">
+                  <Link href="/flights">
+                    Flight Search <ArrowRight className="ml-2" />
+                  </Link>
+                </Button>
+                {
+                  {
+                    customer: (
+                      <>
+                        <Button variant={"ghost"} asChild className="text-lg">
+                          <Link href="/ticketing/my-flights">
+                            Check My Flights <ArrowRight className="ml-2" />
+                          </Link>
+                        </Button>
+                        <Button variant={"ghost"} asChild className="text-lg">
+                          <Link href="/ticketing/statistic">
+                            Check My Spending <ArrowRight className="ml-2" />
+                          </Link>
+                        </Button>
+                      </>
+                    ),
+                    "airline-staff": (
+                      <>
+                        <Button variant={"ghost"} asChild className="text-lg">
+                          <Link href="/staff/flights-management">
+                            Manage Flights <ArrowRight className="ml-2" />
+                          </Link>
+                        </Button>
+                        <Button variant={"ghost"} asChild className="text-lg">
+                          <Link href="/staff/role-management">
+                            Manage Roles <ArrowRight className="ml-2" />
+                          </Link>
+                        </Button>
+                        <Button variant={"ghost"} asChild className="text-lg">
+                          <Link href="/staff/airport-management">
+                            Manage Airports <ArrowRight className="ml-2" />
+                          </Link>
+                        </Button>
+                        <Button variant={"ghost"} asChild className="text-lg">
+                          <Link href="/staff/airplane-management">
+                            Manage Airplanes <ArrowRight className="ml-2" />
+                          </Link>
+                        </Button>
+                        <Button variant={"ghost"} asChild className="text-lg">
+                          <Link href="/staff/system-report">
+                            View System Report <ArrowRight className="ml-2" />
+                          </Link>
+                        </Button>
+                      </>
+                    ),
+                    "booking-agent": (
+                      <>
+                        <Button variant={"ghost"} asChild className="text-lg">
+                          <Link href="/ticketing/my-flights">
+                            Check My Flights <ArrowRight className="ml-2" />
+                          </Link>
+                        </Button>
+                        <Button variant={"ghost"} asChild className="text-lg">
+                          <Link href="/ticketing/statistic">
+                            Check My Stats <ArrowRight className="ml-2" />
+                          </Link>
+                        </Button>
+                      </>
+                    ),
+                    unspecified: null,
+                  }[userType]
+                }
+              </div>
+            }
+
+            <form action={signout}>
+              <Button variant={"destructive"} className="rounded-full">
+                Sign out
+              </Button>
+            </form>
+          </>
+        ) : (
+          <>
+            <div className="flex gap-2">
+              <Button variant={"ghost"} asChild className="text-lg">
+                <Link href="/flights">
+                  Flight Search <ArrowRight className="ml-2" />
+                </Link>
+              </Button>
+            </div>
+            <div className="space-x-4">
+              <Button variant={"secondary"} className="rounded-full" asChild>
+                <Link href="/sign-in">Sign in</Link>
+              </Button>
+              <Button variant={"default"} className="rounded-full">
+                <Link href="/sign-up">Sign up</Link>
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
+    </main>
   );
 }
