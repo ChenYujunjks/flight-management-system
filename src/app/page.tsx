@@ -1,9 +1,9 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { Button } from "~/components/ui/button";
-import { getUser } from "~/server/auth/getUser";
-import { getUserType } from "~/server/auth/getUserType";
-import { signout } from "~/server/auth/actions/signout";
+import { Button } from "@/components/ui/button"
+import { getUser } from "@/server/auth/getUser";
+import { getUserType } from "@/server/auth/getUserType";
+import { signout } from "@/server/auth/actions/signout";
 
 export default async function HomePage() {
   const user = await getUser();
